@@ -80,7 +80,9 @@ ChatBot::ChatBot(ChatBot &&source)
     _image = source._image;
     _currentNode = source._currentNode;
     _rootNode = source._rootNode;
-    (*source._chatLogic).SetChatbotHandle(this);
+    _chatLogic = source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+
     // remove source
     source._image = NULL;
     source._currentNode = nullptr;
@@ -93,10 +95,16 @@ ChatBot &ChatBot::operator=(ChatBot &&source)
     std::cout << "ChatBot Move operator\n";
     if (this == &source)
         return *this;
-    _image = source._image;
-    _currentNode = source._currentNode;
-    _rootNode = source._rootNode;
-    (*source._chatLogic).SetChatbotHandle(this);
+    if (this->_image != NULL)
+    {
+        delete this->_image;
+    }
+    this->_chatLogic = source._chatLogic;
+    this->_rootNode = source._rootNode;
+    this->_currentNode = source._currentNode;
+    this->_image = source._image;
+    this->_chatLogic->SetChatbotHandle(this);
+
     // remove source
     source._image = NULL;
     source._currentNode = nullptr;
